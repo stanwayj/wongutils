@@ -141,6 +141,22 @@ def get_ks_from_fmks(coordinate_info, x1, x2, x3):
     return R, H, P
 
 
+def get_ks_from_wks(coordinate_info, x1, x2, x3):
+    """Return 3d ks R, H, P arrays from 1d wks x1, x2, x3 lists with coordinate_info."""
+
+    Rin = coordinate_info['Rin']
+    lin_frac = coordinate_info['lin_frac']
+    smoothness = coordinate_info['smoothness']
+
+    r = np.exp(x1)
+
+    th = np.pi / 2. * (1. + 2. * lin_frac * (x2 - 0.5) \
+         + (1. - lin_frac) * (np.tanh((x2 - 1.) / smoothness) + 1.) \
+         - (1. - lin_frac) * (np.tanh(-x2 / smoothness) + 1.))
+
+    return  np.meshgrid(r, th, x3, indexing='ij')
+
+
 def _fmks_compute_poly_norm(coordinate_info):
     """Compute poly_norm factor in fmks coordinate system given
     coordinate_info dictionary."""

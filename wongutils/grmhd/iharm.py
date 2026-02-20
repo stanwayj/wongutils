@@ -74,7 +74,7 @@ def get_header_coordinates(fname, verbose=False):
         if metric == 'mks':
             raise NotImplementedError("mks coordinates not implemented")
 
-        elif metric in ['eks', 'mmks', 'fmks']:
+        elif metric in ['eks', 'mmks', 'fmks', 'wks']:
 
             # load black hole spin
             coordinate_info['bhspin'] = hfp[header_name]['geom'][metric]['a'][()]
@@ -108,6 +108,11 @@ def get_header_coordinates(fname, verbose=False):
                 coordinate_info['poly_alpha'] = poly_alpha
                 coordinate_info['poly_xt'] = poly_xt
                 coordinate_info['poly_norm'] = poly_norm
+            elif metric in ['wks']:     # load extra parameters for wks
+                lin_frac = hfp[header_name]['geom'][metric]['lin_frac'][()]
+                smoothness = hfp[header_name]['geom'][metric]['smoothness'][()]
+                coordinate_info['lin_frac'] = lin_frac
+                coordinate_info['smoothness'] = smoothness
 
         else:
             raise NotImplementedError(f"unknown metric {metric}")
